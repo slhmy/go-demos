@@ -39,7 +39,26 @@ func main() {
 		os.Exit(1)
 	}
 
-	if _, err := client.Run(chrt, nil); err != nil {
+	vals := map[string]interface{}{
+		"service": map[string]interface{}{
+			"port": 80,
+		},
+		"ingress": map[string]interface{}{
+			"hosts": []interface{}{
+				map[string]interface{}{
+					"host": "chart-example.local",
+					"paths": []interface{}{
+						map[string]interface{}{
+							"path":     "/",
+							"pathType": "ImplementationSpecific",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	if _, err := client.Run(chrt, vals); err != nil {
 		log.Printf("Failed to install chart: %v", err)
 		os.Exit(1)
 	}
